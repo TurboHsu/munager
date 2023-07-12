@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/TurboHsu/munager/cmd/lyric"
+	"github.com/TurboHsu/munager/cmd/sync"
 	"github.com/spf13/cobra"
 )
 
@@ -27,6 +28,6 @@ func Execute() error {
 
 func init() {
 	// cobra.OnInitialize() should load some config here?
-
+	rootCmd.AddCommand(sync.SyncRoot)
 	rootCmd.AddCommand(lyric.LyricRoot)
 }

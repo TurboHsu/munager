@@ -1,5 +1,5 @@
 # Munager
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/TurboHsu/munager)](https://goreportcard.com/report/github.com/TurboHsu/munager)
 ## 0x01 Intro
 
 Munager is a music library management helper that have multiple functions:
