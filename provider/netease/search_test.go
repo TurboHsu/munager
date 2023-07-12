@@ -1,7 +1,7 @@
 package netease
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestSearchID(t *testing.T) {

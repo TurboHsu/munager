@@ -1,6 +1,6 @@
 package structure
 
 type Song struct {
-	Title string
+	Title  string
 	Artist string
 }
