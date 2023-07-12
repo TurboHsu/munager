@@ -6,10 +6,6 @@ const (
 	NeteasePlatform Platform = iota
 )
 
-type API struct {
-	SearchSong func(key string) (SongDetail, error)
-	SearchLyric func(song SongDetail) (LyricDetail, error)
-}
 
 type SongDetail struct {
 	SongID int

@@ -37,7 +37,7 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 	logging.HandleErr(err)
 	logging.HandleErr(json.Unmarshal(respRaw, &response))
 	if response.Code != 200 {
-		searchErr = fmt.Errorf("search failed, code: %d", response.Code)
+		searchErr = fmt.Errorf("search [%s] failed, code: %d", key ,response.Code)
 		return
 	}
 	if len(response.Result.Songs) == 0 {
