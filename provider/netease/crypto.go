@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TurboHsu/munager/cryptography"
+	"github.com/TurboHsu/munager/util/cryptography"
 )
 
 // Crypto part of Netease API is from Muget, see README.md for more details

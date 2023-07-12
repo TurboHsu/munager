@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/TurboHsu/munager/logman"
-	"github.com/TurboHsu/munager/network"
 	"github.com/TurboHsu/munager/provider/structure"
+	"github.com/TurboHsu/munager/util/logging"
+	"github.com/TurboHsu/munager/util/network"
 )
-
 
 const (
 	searchAPI = "https://music.163.com/weapi/search/get"
@@ -34,9 +33,9 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 	}
 	var response NeteaseSearchResult
 	respRaw, err := network.DoHTTPPostWithHeaders(searchAPI,
-		 convertParams(data, WEAPI), httpHeaders)
-	logman.HandleErr(err)
-	logman.HandleErr(json.Unmarshal(respRaw, &response))
+		convertParams(data, WEAPI), httpHeaders)
+	logging.HandleErr(err)
+	logging.HandleErr(json.Unmarshal(respRaw, &response))
 	if response.Code != 200 {
 		searchErr = fmt.Errorf("search failed, code: %d", response.Code)
 		return

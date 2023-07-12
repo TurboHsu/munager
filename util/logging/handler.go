@@ -1,4 +1,4 @@
-package logman
+package logging
 
 import (
 	"log"

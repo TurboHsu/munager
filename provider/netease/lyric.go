@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TurboHsu/munager/logman"
-	"github.com/TurboHsu/munager/network"
 	"github.com/TurboHsu/munager/provider/structure"
+	"github.com/TurboHsu/munager/util/logging"
+	"github.com/TurboHsu/munager/util/network"
 )
 
 const (
@@ -31,10 +31,10 @@ func SearchLyric(song structure.SongDetail) (structure.LyricDetail, error) {
 	}
 	respRaw, err := network.DoHTTPPostWithHeaders(LinuxAPIURL,
 		params, httpHeaders)
-	logman.HandleErr(err)
+	logging.HandleErr(err)
 
 	var resp NeteaseLyricResult
-	logman.HandleErr(json.Unmarshal(respRaw, &resp))
+	logging.HandleErr(json.Unmarshal(respRaw, &resp))
 
 	if resp.Code != 200 {
 		return structure.LyricDetail{}, fmt.Errorf("search lyric failed, code: %d", resp.Code)
@@ -57,7 +57,7 @@ func parseLyric(rawLyric string) (ret []structure.LyricLine) {
 		if len(line) == 0 {
 			continue
 		}
-		var lyricLine structure.LyricLine	
+		var lyricLine structure.LyricLine
 		// Checks whether the line is a timestamp
 		if line[0] == '[' && line[3] == ':' && line[6] == '.' && line[10] == ']' {
 			var minute, second, microsecond int
