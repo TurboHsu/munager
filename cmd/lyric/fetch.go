@@ -63,9 +63,9 @@ func RunFetch(cmd *cobra.Command, args []string) {
 
 	// TODO: If searching in one provider failed, try another one
 	for _, f := range queue {
+		jobs <- true
 		wg.Add(1)
 		go func(f string) {
-			jobs <- true
 			metadata, err := file.ReadMetadata(f)
 			var keyword string
 			if err != nil {

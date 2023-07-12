@@ -3,6 +3,7 @@ package provider
 import (
 	"github.com/TurboHsu/munager/provider/netease"
 	"github.com/TurboHsu/munager/provider/structure"
+	"github.com/TurboHsu/munager/util/logging"
 )
 
 type Provider int
@@ -16,6 +17,7 @@ func FromString(s string) Provider {
 	case "netease":
 		return Netease
 	default:
+		logging.Info("Unknown provider, use Netease as default")
 		return Netease
 	}
 }
