@@ -9,6 +9,6 @@ var LyricRoot = &cobra.Command{
 }
 
 func init() {
-	// LyricRoot.AddCommand(Fetch)
+	LyricRoot.AddCommand(Fetch)
 	LyricRoot.AddCommand(Query)
 }

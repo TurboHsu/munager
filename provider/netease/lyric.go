@@ -59,13 +59,24 @@ func parseLyric(rawLyric string) (ret []structure.LyricLine) {
 		}
 		var lyricLine structure.LyricLine
 		// Checks whether the line is a timestamp
-		if line[0] == '[' && line[3] == ':' && line[6] == '.' && line[10] == ']' {
+
+		if len(line) > 10 && line[0] == '[' && line[3] == ':' && line[6] == '.' && line[10] == ']' {
+			// 3 digit millisecond timestamp
 			var minute, second, microsecond int
 			fmt.Sscanf(line, "[%d:%d.%d]", &minute, &second, &microsecond)
 			lyricLine.Time.Minute = minute
 			lyricLine.Time.Second = second
 			lyricLine.Time.Microsecond = microsecond
 			lyricLine.Lyric = line[11:]
+			ret = append(ret, lyricLine)
+		} else if len(line) > 9 && line[0] == '[' && line[3] == ':' && line[6] == '.' && line[9] == ']' {
+			// 2 digit millisecond timestamp
+			var minute, second, microsecond int
+			fmt.Sscanf(line, "[%d:%d.%d]", &minute, &second, &microsecond)
+			lyricLine.Time.Minute = minute
+			lyricLine.Time.Second = second
+			lyricLine.Time.Microsecond = microsecond * 10
+			lyricLine.Lyric = line[10:]
 			ret = append(ret, lyricLine)
 		}
 	}
