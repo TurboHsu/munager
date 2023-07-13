@@ -1,8 +1,6 @@
 package server
 
 import (
-	"time"
-
 	"github.com/TurboHsu/munager/util/logging"
 	"github.com/spf13/cobra"
 )
@@ -44,9 +42,7 @@ func runServer(cmd *cobra.Command, args []string) {
 		go Broadcast(addr)
 	}
 
-	ListenAndServe(addr)
+	logging.Info("Listening on " + addr + "...")
 
-	for {
-		time.Sleep(1 * time.Second)
-	}
+	ListenAndServe(addr)
 }

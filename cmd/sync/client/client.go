@@ -32,5 +32,6 @@ func runClient(cmd *cobra.Command, args []string) {
 	// Wait for broadcast
 	dest, port := WaitBroadcast(addr)
 
-	fmt.Println(dest, port)
+	logging.Info("Found server at " + dest + ":" + fmt.Sprint(port) + "...")
+	connectServer(dest, port)
 }

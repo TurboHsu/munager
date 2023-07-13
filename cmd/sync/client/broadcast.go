@@ -28,13 +28,11 @@ func WaitBroadcast(addr string) (dest string, serverPort int) {
 		logging.HandleErr(err)
 
 		// Convert addr to string
-		dest = src.IP.String() + ":" + strconv.Itoa(src.Port)
+		dest = src.IP.String()
 
 		// Check if the message is correct
 		if string(buf[:len(structure.BroadcastMessage)]) != structure.BroadcastMessage {
 			logging.Info("Received wrong broadcast message from " + dest + " , continue waiting...")
-		} else {
-			logging.Info("Received broadcast message from " + dest)
 		}
 
 		serverPort, err = strconv.Atoi(string(buf[len(structure.BroadcastMessage):n]))

@@ -1,7 +1,10 @@
 package server
 
 import (
+	"os"
+
 	"github.com/TurboHsu/munager/cmd/sync/structure"
+	fileprocessing "github.com/TurboHsu/munager/util/file"
 	"github.com/TurboHsu/munager/util/logging"
 	"github.com/gin-gonic/gin"
 )
@@ -11,12 +14,12 @@ func ListenAndServe(addr string) {
 	r.POST("/api/handshake", handshakeAPIHandler)
 	r.POST("/api/get-list", listAPIHandler)
 	r.POST("/api/get-file", fileAPIHandler)
+	r.POST("/api/get-checksum", checksumAPIHandler)
 
 	logging.HandleErr(r.Run(addr))
 }
 
-// This function serves file to client
-func fileAPIHandler(c *gin.Context) {
+func checksumAPIHandler(c *gin.Context) {
 	var result structure.FileServeRequest
 	err := c.ShouldBindJSON(&result)
 	if err != nil {
@@ -58,6 +61,65 @@ func fileAPIHandler(c *gin.Context) {
 
 	// Serves the file
 	servingPath := ServerCommand.Flag("path").Value.String() + file.PathBase + "." + file.Extension
+	f, err := os.OpenFile(servingPath, os.O_RDONLY, 0644)
+	if err != nil {
+		logging.HandleErr(err)
+		c.JSON(500, gin.H{
+			"code": 500,
+			"msg":  "internal server error",
+		})
+		return
+	}
+	defer f.Close()
+	checksum := fileprocessing.CalculateSHA1(f)
+	c.JSON(200, structure.ChecksumStruct{
+		Checksum: checksum,
+	})
+}
+
+// This function serves file to client
+func fileAPIHandler(c *gin.Context) {
+	var result structure.FileServeRequest
+	err := c.ShouldBindJSON(&result)
+	if err != nil {
+		logging.HandleErr(err)
+		c.JSON(400, gin.H{
+			"code": 400,
+			"msg":  "bad request",
+		})
+		return
+	}
+
+	user := getUser(result.Fingerprint)
+	if user == nil {
+		c.JSON(403, gin.H{
+			"code": 403,
+			"msg":  "forbidden",
+		})
+		return
+	}
+
+	// Check if the file is in user's access list
+	flag := false
+	var file structure.FileInfo
+	for _, f := range user.AccessList {
+		if f.PathBase == result.PathBase && f.Extension == result.Extension {
+			flag = true
+			file = f
+			break
+		}
+	}
+
+	if !flag {
+		c.JSON(403, gin.H{
+			"code": 403,
+			"msg":  "forbidden",
+		})
+		return
+	}
+
+	// Serves the file
+	servingPath := ServerCommand.Flag("path").Value.String() + file.PathBase + "." + file.Extension
 	logging.Info("Serving file " + servingPath + " to " + c.ClientIP() + "...")
 	c.File(servingPath)
 
@@ -80,9 +142,9 @@ func listAPIHandler(c *gin.Context) {
 
 	user := getUser(result.Fingerprint)
 	if user == nil {
-		c.JSON(400, gin.H{
-			"code": 400,
-			"msg":  "bad request",
+		c.JSON(403, gin.H{
+			"code": 403,
+			"msg":  "forbidden",
 		})
 		return
 	}
@@ -138,9 +200,10 @@ func handshakeAPIHandler(c *gin.Context) {
 	}
 
 	// Terminate broadcasting
-	doesTerminateBroadcast, err := ServerCommand.Flags().GetBool("keep-broadcasting")
+	doesNotTerminateBroadcast, err := ServerCommand.Flags().GetBool("keep-broadcasting")
 	logging.HandleErr(err)
-	if doesTerminateBroadcast {
+	if !doesNotTerminateBroadcast {
+		logging.Info("Client " + c.ClientIP() + " handshaked with server, terminating broadcasting...")
 		TerminateBroadcast = true
 	}
 

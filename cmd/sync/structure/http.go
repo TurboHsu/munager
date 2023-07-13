@@ -4,6 +4,10 @@ const (
 	HandshakeMagicWord = "Magic smoke is not good"
 )
 
+type ChecksumStruct struct {
+	Checksum string `json:"checksum"`
+}
+
 type Handshake struct {
 	MagicWord   string `json:"magic_word"`
 	Fingerprint string `json:"fingerprint"`
