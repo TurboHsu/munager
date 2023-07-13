@@ -8,12 +8,13 @@ import (
 )
 
 func FilterValidFiles(f []structure.FileInfo) []structure.FileInfo {
-	for i, n := range f {
-		if !isAllowedExtension("." + n.Extension) {
-			f = append(f[:i], f[i+1:]...)
+	var ret []structure.FileInfo
+	for _, n := range f {
+		if isAllowedExtension("." + n.Extension) {
+			ret = append(ret, n)
 		}
 	}
-	return f
+	return ret
 }
 
 func isAllowedExtension(ext string) bool {
