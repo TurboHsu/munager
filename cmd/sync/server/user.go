@@ -26,6 +26,15 @@ func registerUser(fingerprint string) {
 	})
 }
 
+func killUser(fingerprint string) {
+	for i, u := range UserBase {
+		if u.Fingerprint == fingerprint {
+			UserBase = append(UserBase[:i], UserBase[i+1:]...)
+			break
+		}
+	}
+}
+
 func getUser(fingerprint string) (ret *User) {
 	for i := 0; i < len(UserBase); i++ {
 		if UserBase[i].Fingerprint == fingerprint {

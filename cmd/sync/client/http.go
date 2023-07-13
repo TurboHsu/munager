@@ -38,6 +38,44 @@ func connectServer(dest string, port int) {
 
 	// Gets the files
 	getFiles(serverAddr, files)
+
+	// Suicide
+	err = suicide(serverAddr)
+	if err != nil {
+		logging.HandleErr(err)
+		return
+	}
+	logging.Info("Done!")
+}
+
+func suicide(addr string) error {
+	suicideMessage, err := json.Marshal(structure.Suicide{
+		Fingerprint: Fingerprint,
+	})
+	logging.HandleErr(err)
+
+	addr = "http://" + addr + "/api/suicide"
+
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(addr, "application/json", bytes.NewBuffer(suicideMessage))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var result structure.BasicResponse
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return err
+	}
+	if result.Code != 200 {
+		return fmt.Errorf("suicide failed, code: %d, msg: %s", result.Code, result.Msg)
+	}
+
+	return nil
 }
 
 func getFiles(addr string, files []structure.FileInfo) {

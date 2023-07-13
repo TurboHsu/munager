@@ -2,6 +2,7 @@ package server
 
 import (
 	"os"
+	"time"
 
 	"github.com/TurboHsu/munager/cmd/sync/structure"
 	"github.com/TurboHsu/munager/cmd/sync/utils"
@@ -16,8 +17,53 @@ func ListenAndServe(addr string) {
 	r.POST("/api/get-list", listAPIHandler)
 	r.POST("/api/get-file", fileAPIHandler)
 	r.POST("/api/get-checksum", checksumAPIHandler)
+	r.POST("/api/suicide", suicideHandler)
 
 	logging.HandleErr(r.Run(addr))
+}
+
+func suicideHandler(c *gin.Context) {
+	var result structure.Suicide
+	err := c.ShouldBindJSON(&result)
+	if err != nil {
+		logging.HandleErr(err)
+		c.JSON(400, gin.H{
+			"code": 400,
+			"msg":  "bad request",
+		})
+		return
+	}
+
+	// Destories the user
+	killUser(result.Fingerprint)
+
+	// Log it
+	logging.Info("User " + result.Fingerprint + " destructed.")
+
+	// Checks whether this server need to be running
+	keepBrocasting, err := ServerCommand.Flags().GetBool("keep-broadcasting")
+	if err != nil {
+		logging.HandleErr(err)
+		c.JSON(400, gin.H{
+			"code": 400,
+			"msg":  "bad request",
+		})
+		return
+	}
+
+	// Checks whether needs to take a break
+	go func() {
+		time.Sleep(1 * time.Second)
+		if !keepBrocasting && len(UserBase) == 0 {
+			// Time for a break
+			os.Exit(0)
+		}
+	}()
+
+	c.JSON(200, gin.H{
+		"code": 200,
+		"msg":  "ok",
+	})
 }
 
 func checksumAPIHandler(c *gin.Context) {

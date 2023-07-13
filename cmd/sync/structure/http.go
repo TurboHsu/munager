@@ -4,6 +4,10 @@ const (
 	HandshakeMagicWord = "Magic smoke is not good"
 )
 
+type Suicide struct {
+	Fingerprint string `json:"fingerprint"`
+}
+
 type ChecksumStruct struct {
 	Checksum string `json:"checksum"`
 }
