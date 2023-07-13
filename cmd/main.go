@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const Version = "no?"
+const Version = "0.1"
 
 var rootCmd = &cobra.Command{
 	Use:   "munager",
