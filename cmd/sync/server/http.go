@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/TurboHsu/munager/cmd/sync/structure"
+	"github.com/TurboHsu/munager/cmd/sync/utils"
 	fileprocessing "github.com/TurboHsu/munager/util/file"
 	"github.com/TurboHsu/munager/util/logging"
 	"github.com/gin-gonic/gin"
@@ -152,12 +153,14 @@ func listAPIHandler(c *gin.Context) {
 	var diff []structure.FileInfo
 
 	// Find all files in local
-	local := getFiles(ServerCommand.Flag("path").Value.String())
+	local := utils.GetFiles(ServerCommand.Flag("path").Value.String())
+	local = utils.FilterValidFiles(local)
 
 	// Diff all the files
 	for _, l := range local {
 		flag := false
 		for _, r := range result.Files {
+			// Checks PathBase only, because client and server may have different file format
 			if l.PathBase == r.PathBase {
 				flag = true
 				break

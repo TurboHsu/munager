@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 
+	"github.com/TurboHsu/munager/cmd/sync/utils"
 	"github.com/TurboHsu/munager/util/logging"
 	"github.com/spf13/cobra"
 )
@@ -18,6 +19,11 @@ You can also specify server address manually.`,
 func init() {
 	ClientCommand.Flags().StringP("address", "a", ":10721", "Address to connect to")
 	ClientCommand.Flags().StringP("path", "p", ".", "Path to sync")
+	ClientCommand.Flags().IntP("thread", "t", 5, "Number of threads to use")
+	ClientCommand.Flags().BoolP("transcode", "T", false, "Transcode the file received using ffmpeg")
+	ClientCommand.Flags().StringP("ffmpeg-path", "F", "ffmpeg", "Where ffmpeg is located")
+	ClientCommand.Flags().StringP("ffmpeg-arg", "A", "-vn -ar 48000 -b:a 512k -n", "Arguments to ffmpeg")
+	ClientCommand.Flags().StringP("output-format", "O", "opus", "Output format")
 	ClientCommand.Run = runClient
 }
 
@@ -26,6 +32,8 @@ func runClient(cmd *cobra.Command, args []string) {
 	logging.HandleErr(err)
 	_, err = ClientCommand.Flags().GetString("path")
 	logging.HandleErr(err)
+
+	utils.FixPath(ClientCommand)
 
 	logging.Info("Finding sync server...")
 

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/TurboHsu/munager/cmd/sync/utils"
 	"github.com/TurboHsu/munager/util/logging"
 	"github.com/spf13/cobra"
 )
@@ -29,14 +30,7 @@ func runServer(cmd *cobra.Command, args []string) {
 	addr, err := ServerCommand.Flags().GetString("address")
 	logging.HandleErr(err)
 
-	// Check if path have slash in the end
-	path, err := ServerCommand.Flags().GetString("path")
-	logging.HandleErr(err)
-	if len(path) == 0 {
-		ServerCommand.Flag("path").Value.Set("./")
-	} else if path[len(path)-1] != '/' {
-		ServerCommand.Flag("path").Value.Set(path + "/")
-	}
+	utils.FixPath(ServerCommand)
 
 	if doBroadcast {
 		go Broadcast(addr)
