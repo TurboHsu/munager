@@ -1,5 +1,6 @@
 # Ignore executable
 munager
+*.exe
 
 # Test folder
 test/
