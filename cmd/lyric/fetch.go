@@ -78,6 +78,9 @@ func RunFetch(cmd *cobra.Command, args []string) {
 			song, err := provider.SearchSong(keyword, 1)
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 			lyric, err := provider.SearchLyric(song[0])

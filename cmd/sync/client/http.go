@@ -118,6 +118,9 @@ func getFiles(addr string, files []structure.FileInfo) {
 			})
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 
@@ -125,11 +128,17 @@ func getFiles(addr string, files []structure.FileInfo) {
 			req, err := http.NewRequest("POST", addr, bytes.NewBuffer(requestBody))
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 			resp, err := client.Do(req)
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 			defer resp.Body.Close()
@@ -138,6 +147,9 @@ func getFiles(addr string, files []structure.FileInfo) {
 			// Checks if file exists
 			if _, err := os.Stat(filePath); err == nil {
 				logging.Info("File " + filePath + " already exists, skipping...")
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 
@@ -147,6 +159,9 @@ func getFiles(addr string, files []structure.FileInfo) {
 				err = os.MkdirAll(parentPath, 0755)
 				if err != nil {
 					logging.HandleErr(err)
+					bar.Add(1)
+					wg.Done()
+					<-jobs
 					return
 				}
 			}
@@ -155,12 +170,18 @@ func getFiles(addr string, files []structure.FileInfo) {
 			downloadedFile, err := os.Create(filePath)
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 
 			_, err = io.Copy(downloadedFile, resp.Body)
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 
@@ -168,6 +189,9 @@ func getFiles(addr string, files []structure.FileInfo) {
 			err = downloadedFile.Close()
 			if err != nil {
 				logging.HandleErr(err)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
 				return
 			}
 
