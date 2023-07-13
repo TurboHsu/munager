@@ -27,8 +27,10 @@ func runClient(cmd *cobra.Command, args []string) {
 	_, err = ClientCommand.Flags().GetString("path")
 	logging.HandleErr(err)
 
-	// Wait for broadcast
-	dest := WaitBroadcast(addr)
+	logging.Info("Finding sync server...")
 
-	fmt.Println(dest)
+	// Wait for broadcast
+	dest, port := WaitBroadcast(addr)
+
+	fmt.Println(dest, port)
 }

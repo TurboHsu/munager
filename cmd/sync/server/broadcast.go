@@ -5,17 +5,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/TurboHsu/munager/cmd/sync/structure"
 	"github.com/TurboHsu/munager/util/logging"
 )
 
-const (
-	BroadcastMessage = "WATASHI_NO_ONANII_MITTE_KUDASAI"
-)
+var TerminateBroadcast bool
 
-var terminateBroadcast bool
-
-func broadcast(addr string) {
-	terminateBroadcast = false
+func Broadcast(addr string) {
+	TerminateBroadcast = false
 
 	// Parse listening port
 	_, port, err := net.SplitHostPort(addr)
@@ -25,7 +22,7 @@ func broadcast(addr string) {
 
 	logging.Info("Start broadcasting on port " + port + "...")
 
-	for !terminateBroadcast {
+	for !TerminateBroadcast {
 		conn, err := net.DialUDP("udp", nil, &net.UDPAddr{
 			IP:   net.IPv4(255, 255, 255, 255),
 			Port: portInt,
@@ -34,7 +31,7 @@ func broadcast(addr string) {
 		defer conn.Close()
 
 		// Send broadcast message
-		_, err = conn.Write([]byte(BroadcastMessage))
+		_, err = conn.Write([]byte(structure.BroadcastMessage + port))
 		logging.HandleErr(err)
 
 		// Sleep

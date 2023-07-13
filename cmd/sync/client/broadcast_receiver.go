@@ -4,11 +4,11 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/TurboHsu/munager/cmd/sync/server"
+	"github.com/TurboHsu/munager/cmd/sync/structure"
 	"github.com/TurboHsu/munager/util/logging"
 )
 
-func WaitBroadcast(addr string) (dest string) {
+func WaitBroadcast(addr string) (dest string, serverPort int) {
 	// Get the listing port
 	_, port, err := net.SplitHostPort(addr)
 	logging.HandleErr(err)
@@ -31,7 +31,15 @@ func WaitBroadcast(addr string) (dest string) {
 		dest = src.IP.String() + ":" + strconv.Itoa(src.Port)
 
 		// Check if the message is correct
-		if string(buf[:n]) != server.BroadcastMessage {
+		if string(buf[:len(structure.BroadcastMessage)]) != structure.BroadcastMessage {
+			logging.Info("Received wrong broadcast message from " + dest + " , continue waiting...")
+		} else {
+			logging.Info("Received broadcast message from " + dest)
+		}
+
+		serverPort, err = strconv.Atoi(string(buf[len(structure.BroadcastMessage):n]))
+		if err != nil {
+			logging.HandleErr(err)
 			logging.Info("Received wrong broadcast message from " + dest + " , continue waiting...")
 		} else {
 			logging.Info("Received broadcast message from " + dest)

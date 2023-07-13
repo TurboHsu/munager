@@ -20,6 +20,8 @@ func init() {
 	ServerCommand.Flags().BoolP("broadcast", "b", true, "Broadcast server address to local network")
 	ServerCommand.Flags().StringP("path", "p", ".", "Path to sync")
 	ServerCommand.Flags().BoolP("keep-broadcasting", "k", false, "Keep broadcasting server address to local network even client handshaked with server")
+
+	// Register run function
 	ServerCommand.Run = runServer
 }
 
@@ -29,11 +31,20 @@ func runServer(cmd *cobra.Command, args []string) {
 	addr, err := ServerCommand.Flags().GetString("address")
 	logging.HandleErr(err)
 
-	if doBroadcast {
-		go broadcast(addr)
+	// Check if path have slash in the end
+	path, err := ServerCommand.Flags().GetString("path")
+	logging.HandleErr(err)
+	if len(path) == 0 {
+		ServerCommand.Flag("path").Value.Set("./")
+	} else if path[len(path)-1] != '/' {
+		ServerCommand.Flag("path").Value.Set(path + "/")
 	}
 
-	listen(addr)
+	if doBroadcast {
+		go Broadcast(addr)
+	}
+
+	ListenAndServe(addr)
 
 	for {
 		time.Sleep(1 * time.Second)
