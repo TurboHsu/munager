@@ -51,13 +51,13 @@ func RunFetch(cmd *cobra.Command, args []string) {
 	logging.Info("Found " + strconv.Itoa(len(queue)) + " songs without lyrics")
 
 	// Start routines to do that
-	threads, err := Fetch.Flags().GetInt("threads")
+	thread, err := Fetch.Flags().GetInt("thread")
 	logging.HandleErr(err)
 	provider := provider.FromString(Fetch.Flag("provider").Value.String())
 	formatter := lyricformatter.FromString(Fetch.Flag("format").Value.String())
 
 	// jobs is a thread controller
-	jobs := make(chan bool, threads)
+	jobs := make(chan bool, thread)
 	var wg sync.WaitGroup
 	bar := progressbar.Default(int64(len(queue)))
 
@@ -109,7 +109,7 @@ func init() {
 	Fetch.Flags().BoolP("overwrite", "o", false, "Overwrite existing lyric files")
 	Fetch.Flags().StringP("provider", "p", "netease", "Specify a lyric provider")
 	Fetch.Flags().StringP("path", "P", ".", "Specify a path to search for songs, single file is also supported")
-	Fetch.Flags().IntP("threads", "t", 5, "Specify the number of threads to use")
+	Fetch.Flags().IntP("thread", "t", 5, "Specify the number of threads to use")
 	Fetch.Flags().BoolP("silent", "s", true, "Don't print detailed information to stdout")
 	appendFormattingFlags(Fetch)
 	Fetch.Run = RunFetch

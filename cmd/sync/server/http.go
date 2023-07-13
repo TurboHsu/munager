@@ -35,7 +35,7 @@ func suicideHandler(c *gin.Context) {
 		return
 	}
 
-	// Destories the user
+	// Destorys the user
 	killUser(result.Fingerprint)
 
 	// Log it
