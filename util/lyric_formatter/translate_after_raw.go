@@ -15,7 +15,7 @@ func translateAfterRaw(lyric *structure.LyricDetail) string {
 	}
 
 	for _, line := range lyric.TranslatedLyric {
-		translated[calcTime(&line)] = summonLRCTimestamp(&line) + line.Lyric
+		translated[calcTime(&line)] = summonLRCTimestamp(&line) + "「" + line.Lyric + "」"
 	}
 
 	// Merge two maps
