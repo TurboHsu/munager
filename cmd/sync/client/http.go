@@ -29,6 +29,17 @@ func connectServer(dest string, port int) {
 		return
 	}
 
+	// Trim files if needed
+	needTrim, err := ClientCommand.Flags().GetBool("trim")
+	logging.HandleErr(err)
+	if needTrim {
+		err = trimFiles(serverAddr)
+		if err != nil {
+			logging.HandleErr(err)
+			return
+		}
+	}
+
 	// Sends local file list
 	files, err := sendFileList(serverAddr)
 	if err != nil {
@@ -46,6 +57,65 @@ func connectServer(dest string, port int) {
 		return
 	}
 	logging.Info("Done!")
+}
+
+func trimFiles(addr string) error {
+	// Read silent flag
+	isSilent, err := ClientCommand.Flags().GetBool("silent")
+	logging.HandleErr(err)
+
+	// Construct API addr
+	addr = "http://" + addr + "/api/get-file"
+
+	// Sends nothing to get the full list
+	sendFileListMsg, err := json.Marshal(structure.ListRequest{
+		Fingerprint: Fingerprint,
+	})
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(addr, "application/json", bytes.NewBuffer(sendFileListMsg))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var result structure.ListResponse
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return err
+	}
+
+	// Get local file list
+	path := ClientCommand.Flag("path").Value.String()
+	files := utils.GetFiles(path)
+	files = utils.FilterValidFiles(files)
+
+	// Get the trim list
+	for _, f := range files {
+		burn := true
+		for _, r := range result.Files {
+			if f.PathBase == r.PathBase {
+				burn = false
+				break
+			}
+		}
+
+		if burn {
+			if !isSilent {
+				logging.Info("Deleting " + f.PathBase + "." + f.Extension + "...")
+			}
+			filePath := ClientCommand.Flag("path").Value.String() + f.PathBase + "." + f.Extension
+			err = os.Remove(filePath)
+			if err != nil {
+				logging.HandleErr(err)
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 func suicide(addr string) error {
