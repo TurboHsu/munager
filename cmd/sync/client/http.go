@@ -99,6 +99,10 @@ func getFiles(addr string, files []structure.FileInfo) {
 	outputFormat, err := ClientCommand.Flags().GetString("output-format")
 	logging.HandleErr(err)
 
+	// Read silent flag
+	isSilent, err := ClientCommand.Flags().GetBool("silent")
+	logging.HandleErr(err)
+
 	// Construct API address
 	addr = "http://" + addr + "/api/get-file"
 
@@ -198,7 +202,9 @@ func getFiles(addr string, files []structure.FileInfo) {
 			// Checks whether the user wants to run ffmpeg
 			if transcode {
 				if fileprocessing.IsExtAudio("." + f.Extension) {
-					logging.Info("Transcoding " + filePath + "...")
+					if !isSilent {
+						logging.Info("Transcoding " + filePath + "...")
+					}
 					// Run transcoding
 					err := utils.Transcode(ClientCommand.Flag("path").Value.String()+f.PathBase, ffmpegPath, ffmpegArg, f.Extension, outputFormat)
 					if err != nil {

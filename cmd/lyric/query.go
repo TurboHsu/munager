@@ -16,11 +16,18 @@ var Query = &cobra.Command{
 	Short: "Query lyrics",
 	Long: `Query lyrics for a given keyword.
 You can save the result to a file by using the -o flag.`,
+	Example: `munager lyric query -o "Waiting for Love.lrc" -f raw-only Waiting for Love`,
 }
 
 func RunQuery(cmd *cobra.Command, args []string) {
 	if len(args) == 0 {
 		logging.HandleErr(fmt.Errorf("no keyword specified, please specify some keywords in order to search something. For more information, please use the --help flag"))
+		return
+	}
+
+	overwrite, err := Query.Flags().GetBool("overwrite")
+	if err != nil {
+		logging.HandleErr(err)
 		return
 	}
 
@@ -41,7 +48,7 @@ func RunQuery(cmd *cobra.Command, args []string) {
 
 	if Query.Flag("output").Value.String() != "" {
 		// Find whether the file exists
-		if _, err := os.Stat(Query.Flag("output").Value.String()); err == nil {
+		if _, err := os.Stat(Query.Flag("output").Value.String()); err == nil && !overwrite {
 			// File exists
 			logging.HandleErr(fmt.Errorf("file %s already exists, skipping", Query.Flag("output").Value.String()))
 			return
@@ -62,6 +69,7 @@ func init() {
 	Query.Flags().StringP("provider", "p", "netease", "Specify a lyric provider")
 	Query.Flags().StringP("output", "o", "", "Specify a file to save the result")
 	Query.Flags().BoolP("silent", "s", false, "Don't print the result to stdout")
+	Query.Flags().BoolP("overwrite", "O", false, "Overwrite existing lyric files")
 	Query.Run = RunQuery
 	appendFormattingFlags(Query)
 }

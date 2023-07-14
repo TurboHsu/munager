@@ -20,6 +20,7 @@ var Fetch = &cobra.Command{
 	Short: "Fetch lyrics",
 	Long: `This command will search and download lyrics from selected lyric providers.
 By running this command, Munager will search for lyrics of all songs in the current directory, if they don't have a lyric file.`,
+	Example: `munager lyric fetch --path="/home/me/Music" --overwrite --thread=8`,
 }
 
 func RunFetch(cmd *cobra.Command, args []string) {
@@ -110,7 +111,7 @@ func init() {
 	Fetch.Flags().StringP("provider", "p", "netease", "Specify a lyric provider")
 	Fetch.Flags().StringP("path", "P", ".", "Specify a path to search for songs, single file is also supported")
 	Fetch.Flags().IntP("thread", "t", 5, "Specify the number of threads to use")
-	Fetch.Flags().BoolP("silent", "s", true, "Don't print detailed information to stdout")
+	Fetch.Flags().BoolP("silent", "s", true, "Don't print detailed information to stdout. It is on by default, to disable it, run --silent=false")
 	appendFormattingFlags(Fetch)
 	Fetch.Run = RunFetch
 }

@@ -14,6 +14,7 @@ var ClientCommand = &cobra.Command{
 	Long: `Run a sync client to sync music files between devices.
 By default it will look for server broadcast message and connect to it.
 You can also specify server address manually.`,
+	Example: `munager sync client --transcode -p "/home/me/Music" --thread=8 --trim`,
 }
 
 func init() {
@@ -24,6 +25,8 @@ func init() {
 	ClientCommand.Flags().StringP("ffmpeg-path", "F", "ffmpeg", "Where ffmpeg is located")
 	ClientCommand.Flags().StringP("ffmpeg-arg", "A", "-vn -ar 48000 -b:a 512k -n", "Arguments to ffmpeg")
 	ClientCommand.Flags().StringP("output-format", "O", "opus", "Output format")
+	ClientCommand.Flags().BoolP("silent", "s", true, "Stop spamming transcoding log. It is on by default, to disable it, run --silent=false")
+	// ClientCommand.Flags().BoolP("trim", "m", false, "Delete audio related files that are not in the server")
 	ClientCommand.Run = runClient
 }
 
