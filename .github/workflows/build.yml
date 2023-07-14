@@ -23,7 +23,7 @@ jobs:
         run: GOOS=linux GOARCH=amd64 go build -v -ldflags="-s -w" -o opt/munager_linux_amd64 .
 
       - name: Build for windows/amd64
-        run: GOOS=windows GOARCH=amd64 go build -v -ldflags="-s -w" -o opt/munager_windows_amd64 .
+        run: GOOS=windows GOARCH=amd64 go build -v -ldflags="-s -w" -o opt/munager_windows_amd64.exe .
 
       - name: Build for android/arm64
         run: GOOS=android GOARCH=arm64 go build -v -ldflags="-s -w" -o opt/munager_android_arm64 .
