@@ -3,7 +3,7 @@ name: Build binary files
 on:
   push:
     tags:
-      - '🔖 v*.*'
+      - 'v*.*.*'
   pull_request:
     branches:
       - main
