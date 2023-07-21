@@ -1,5 +1,5 @@
 package structure
 
 const (
-	BroadcastMessage = "Watasih no onanii mitte kudasai"
+	BroadcastMessage = "Watashi no onanii mitte kudasai"
 )
