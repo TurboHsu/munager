@@ -2,6 +2,8 @@ package client
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/TurboHsu/munager/cmd/sync/utils"
 	"github.com/TurboHsu/munager/util/logging"
@@ -37,12 +39,18 @@ func runClient(cmd *cobra.Command, args []string) {
 	logging.HandleErr(err)
 
 	utils.FixPath(ClientCommand)
+	if len(strings.Split(addr, ":")[0]) == 0 {
+		logging.Info("Finding sync server...")
 
-	logging.Info("Finding sync server...")
+		// Wait for broadcast
+		dest, port := WaitBroadcast(addr)
 
-	// Wait for broadcast
-	dest, port := WaitBroadcast(addr)
-
-	logging.Info("Found server at " + dest + ":" + fmt.Sprint(port) + "...")
-	connectServer(dest, port)
+		logging.Info("Found server at " + dest + ":" + fmt.Sprint(port) + "...")
+		connectServer(dest, port)
+	} else {
+		logging.Info("Connecting to " + addr + "...")
+		port, err := strconv.Atoi(strings.Split(addr, ":")[1])
+		logging.HandleErr(err)
+		connectServer(strings.Split(addr, ":")[0], port)
+	}
 }
