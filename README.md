@@ -1,3 +1,7 @@
+<div align="center" width="100%">
+    <img src="./assets/icon.svg" width="50%" alt="">
+</div>
+
 # Munager
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/TurboHsu/munager)](https://goreportcard.com/report/github.com/TurboHsu/munager)
@@ -38,7 +42,8 @@ Type `munager sync` for help. It have several subcommands which does:
 ### Fetching lyrics
 
 Now you have an folder which contains some songs:
-```
+
+```bash
 THE BOOK
 ├── 01. Epilogue.flac
 ├── 02. アンコール.flac
@@ -55,6 +60,7 @@ THE BOOK
 ```
 
 To fetch lyric for it, just run
+
 ```bash
 $ munager lyric fetch --path="./THE BOOK/"
 2023-07-14 09:43:53  [I]  Found 9 songs without lyrics
@@ -62,8 +68,10 @@ $ munager lyric fetch --path="./THE BOOK/"
 2023-07-14 09:43:55  [I]  Done!
 
 ```
+
 Then you should see some `.lrc` files in your sweet folder.
-```
+
+```bash
 THE BOOK
 ├── 01. Epilogue.flac
 ├── 01. Epilogue.lrc
@@ -88,9 +96,11 @@ THE BOOK
 1 directory, 19 files
 ```
 
-### Sync
+### Syncing music library
+
 Imagine you have two devices which contains music library that is not synced.
-```
+
+```bash
 server
 └── THE BOOK
     ├── 01. Epilogue.flac
@@ -132,10 +142,12 @@ client
 
 4 directories, 34 files
 ```
+
 On server side, just run `munager sync server`, and on client side, just run `munager sync client`. After they do their stuff, the music library should be synced.
 
 Adding a `--transcode` flag can also achieve this:
-```
+
+```bash
 server
 └── THE BOOK
     ├── 01. Epilogue.flac
