@@ -8,20 +8,20 @@
 
 [中文文档](./README_CN.md)
 
-## 0x01 Intro
+## 0x00 Intro
 
 Munager is a music library management helper that have several functions:
 
 - Automatically search for lyric files on online services like Netease Music, etc.
 - Syncs your music library between devices with customizable transcoding rules.
 
-## 0x02 Install
+## 0x01 Install
 
 If you wanna compile yourself, just clone this project and run `go build .`.
 
 If you just want to run the binary, find it in `Releases` or `Github Actions Artifacts` for CI Build.
 
-## 0x03 Usage
+## 0x02 Usage
 
 _Munager is quite self-explained. Use `--help` for explainations._
 
@@ -39,7 +39,7 @@ Type `munager sync` for help. It have several subcommands which does:
 - `client` Starts a client. It can automatically discover server side and syncs local music library with server side. You can also transcode your received songs to another format (FFmpeg) using `--transcode` flag.
 - `server` Starts a server. It broadcasts its existance to local network, and serves local music library as you expected.
 
-## 0x04 Example
+## 0x03 Example
 
 ### Fetching lyrics
 

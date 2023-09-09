@@ -6,20 +6,20 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/TurboHsu/munager)](https://goreportcard.com/report/github.com/TurboHsu/munager)
 
-## 0x01 这啥
+## 0x00 这啥
 
 Munager 是一个有以下功能的音乐库管理工具：
 
 - 自动化的为您的本地乐库抓取歌词
 - 跨设备同步乐库，支持自定义转码规则
 
-## 0x02 咋装
+## 0x01 咋装
 
 如果你喜欢自己编译&运行一些东西，直接使用 `go build .`就可以了。
 
 如果你想要直接用这个, 可以在 `Releases` 中找到发行版，或者你可以在 `Github Actions Artifacts` 中找到CI构建的版本。
 
-## 0x03 咋用
+## 0x02 咋用
 
 _Munager 的帮助信息足够解释自己。 尝试添加 `--help` 来查看详细参数以及使用方法。_
 
@@ -37,7 +37,7 @@ _Munager 的帮助信息足够解释自己。 尝试添加 `--help` 来查看详
 - `client` 将会启动客户端。在局域网内，它一般能够自动发现服务器，并且同步本地乐库（增量更新）。您也可以使用 `--transcode` 参数来指定转码规则。（这将会用到FFmpeg。您可以指定FFmpeg可执行文件的路径。）
 - `server` 将会启动服务器。它会向局域网内广播自己的存在，并且提供本地乐库的服务，就如你想要的那样。
 
-## 0x04 例子
+## 0x03 例子
 
 ### 我要同步一些歌
 
