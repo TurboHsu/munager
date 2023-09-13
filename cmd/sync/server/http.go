@@ -13,6 +13,9 @@ import (
 )
 
 func ListenAndServe(addr string) {
+	// Set release mode
+	gin.SetMode(gin.ReleaseMode)
+
 	r := gin.Default()
 	r.POST("/api/handshake", handshakeAPIHandler)
 	r.POST("/api/get-list", listAPIHandler)
