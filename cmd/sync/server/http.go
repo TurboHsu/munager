@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -205,7 +204,6 @@ func listAPIHandler(c *gin.Context) {
 	// Find all files in local
 	local := utils.GetFiles(ServerCommand.Flag("path").Value.String())
 	local = utils.FilterValidFiles(local)
-	fmt.Println(local)
 
 	// Diff all the files
 	for _, l := range local {
