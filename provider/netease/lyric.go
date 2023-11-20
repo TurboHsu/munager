@@ -20,7 +20,7 @@ func SearchLyric(song structure.SongDetail) (structure.LyricDetail, error) {
 	data := map[string]interface{}{
 		"method": "POST",
 		"url":    "https://music.163.com/api/song/lyric?lv=-1&kv=-1&tv=-1",
-		"params": map[string]int{
+		"params": map[string]string{
 			"id": song.SongID,
 		},
 	}

@@ -3,6 +3,7 @@ package netease
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/TurboHsu/munager/provider/structure"
 	"github.com/TurboHsu/munager/util/logging"
@@ -50,7 +51,7 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 			artist += a.Name + " "
 		}
 		result = append(result, structure.SongDetail{
-			SongID:     song.ID,
+			SongID:     strconv.Itoa(song.ID),
 			SongName:   song.Name,
 			ArtistName: artist,
 			AlbumName:  song.Album.Name,

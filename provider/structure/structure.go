@@ -4,10 +4,11 @@ type Platform int
 
 const (
 	NeteasePlatform Platform = iota
+	TencentPlatform
 )
 
 type SongDetail struct {
-	SongID     int
+	SongID     string
 	SongName   string
 	ArtistName string
 	AlbumName  string

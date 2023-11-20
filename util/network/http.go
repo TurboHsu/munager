@@ -7,8 +7,16 @@ import (
 	"strings"
 )
 
-func DoHTTPGET(url string) (body []byte, err error) {
-	resp, err := http.Get(url)
+func DoHTTPGETWithHeaders(url string, headers [][]string) (body []byte, err error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	for _, header := range headers {
+		req.Header.Set(header[0], header[1])
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -20,10 +28,6 @@ func DoHTTPGET(url string) (body []byte, err error) {
 	}
 
 	return body, nil
-}
-
-func DoHTTPPost(url string, data url.Values) (body []byte, err error) {
-	return DoHTTPPostWithHeaders(url, data, nil)
 }
 
 func DoHTTPPostWithHeaders(url string, data url.Values, headers [][]string) (body []byte, err error) {
@@ -48,4 +52,12 @@ func DoHTTPPostWithHeaders(url string, data url.Values, headers [][]string) (bod
 	}
 
 	return body, nil
+}
+
+func DoHTTPGET(url string) (body []byte, err error) {
+	return DoHTTPGETWithHeaders(url, nil)
+}
+
+func DoHTTPPost(url string, data url.Values) (body []byte, err error) {
+	return DoHTTPPostWithHeaders(url, data, nil)
 }
