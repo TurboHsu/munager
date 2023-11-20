@@ -65,7 +65,7 @@ func trimFiles(addr string) error {
 	logging.HandleErr(err)
 
 	// Construct API addr
-	addr = "http://" + addr + "/api/get-file"
+	addr = "http://" + addr + "/api/get-list"
 
 	// Sends nothing to get the full list
 	sendFileListMsg, err := json.Marshal(structure.ListRequest{
