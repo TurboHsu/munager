@@ -68,7 +68,7 @@ func parseLyric(raw string) (ret []structure.LyricLine) {
 		if doesContainCopyrightStatement(line) {
 			continue
 		}
-		
+
 		var newLine structure.LyricLine
 
 		if len(line) > 10 && line[0] == '[' && line[3] == ':' && line[6] == '.' && line[10] == ']' &&

@@ -95,5 +95,5 @@ type LyricFetchResult struct {
 	Type    int    `json:"type"`
 	Songt   int    `json:"songt"`
 	Lyric   string `json:"lyric"`
-	Trans	string `json:"trans"`
+	Trans   string `json:"trans"`
 }

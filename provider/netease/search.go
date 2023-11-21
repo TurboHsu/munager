@@ -54,6 +54,6 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 			Platform:   structure.NeteasePlatform,
 		})
 	}
-	
+
 	return
 }
