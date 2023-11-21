@@ -12,6 +12,7 @@ import (
 
 const (
 	searchAPI = "https://c.y.qq.com/soso/fcgi-bin/search_cp?format=json&platform=yqq&new_json=1"
+	lyricAPI  = "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?platform=yqq&g_tk=5381"
 )
 
 func SearchSong(keyword string, quantity int) (result []structure.SongDetail, searchErr error) {
@@ -39,9 +40,5 @@ func SearchSong(keyword string, quantity int) (result []structure.SongDetail, se
 		result = append(result, songDetail)
 	}
 
-	return nil, nil
-}
-
-func FetchLyric(songID string) (result structure.LyricDetail, fetchErr error) {
 	return
 }

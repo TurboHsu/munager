@@ -87,3 +87,13 @@ type SongSearchResult struct {
 	Time    int    `json:"time"`
 	Tips    string `json:"tips"`
 }
+
+type LyricFetchResult struct {
+	Retcode int    `json:"retcode"`
+	Code    int    `json:"code"`
+	Subcode int    `json:"subcode"`
+	Type    int    `json:"type"`
+	Songt   int    `json:"songt"`
+	Lyric   string `json:"lyric"`
+	Trans	string `json:"trans"`
+}
