@@ -41,10 +41,6 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 		searchErr = fmt.Errorf("search [%s] failed, code: %d", key, response.Code)
 		return
 	}
-	if len(response.Result.Songs) == 0 {
-		searchErr = fmt.Errorf("search failed, no result returned")
-		return
-	}
 	for _, song := range response.Result.Songs {
 		var artist string
 		for _, a := range song.Artists {
@@ -58,5 +54,6 @@ func SearchSong(key string, quantity int) (result []structure.SongDetail, search
 			Platform:   structure.NeteasePlatform,
 		})
 	}
+	
 	return
 }

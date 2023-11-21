@@ -63,6 +63,8 @@ func RunFetch(cmd *cobra.Command, args []string) {
 	bar := progressbar.Default(int64(len(queue)))
 
 	// TODO: If searching in one provider failed, try another one
+	// Another thought: Make a provider called auto, rank the search result.
+
 	for _, f := range queue {
 		jobs <- true
 		wg.Add(1)
@@ -84,6 +86,15 @@ func RunFetch(cmd *cobra.Command, args []string) {
 				<-jobs
 				return
 			}
+
+			if len(song) == 0 {
+				logging.Info("No result for " + f)
+				bar.Add(1)
+				wg.Done()
+				<-jobs
+				return
+			}
+
 			lyric, err := provider.SearchLyric(song[0])
 			logging.HandleErr(err)
 
